@@ -1,6 +1,7 @@
 import random
 
 from Board import layout
+from Translator import Prevodnik
 
 MY_SEPARATOR = "=" * 50
 
@@ -21,9 +22,8 @@ def main() -> None:
     player = 1
     while True:
         print(f"Player {player} turn:")
-        move_row, move_column, board = Players_move_row(muj_board,size_of_board, player)
-        # move_column, board = Players_move_column(muj_board,size_of_board, player)
-        player, board = Print_move(muj_board, move_row, move_column, Symbol_player1, player)
+        move, board = Players_move(muj_board,player)
+        player, board = Print_move(muj_board, move, Symbol_player1, player)
         print(board)
 
 
@@ -80,23 +80,19 @@ def Selection_of_X_0() -> str:
             return selection
 
 
-def Players_move_row(muj_board, size_of_board, player):
+def Players_move(muj_board, player):
     while True:
         print(MY_SEPARATOR)
-        move_row = input(f"Player {player} | Please enter the row: ")
-        if Control_of_user_input(move_row, size_of_board) == True:
+        move = input(f"Player {player} | Please enter your move: ")
+        move_translated = (Prevodnik[move]).split()
+        if Control_of_user_input(move) == True:
             continue
 
-        print(MY_SEPARATOR)
-        move_column = input(f"Player {player} | Please enter the column: ")
-        if Control_of_user_input(move_column, size_of_board) == True:
-            continue
-
-        if muj_board[int(move_row)][int(move_column)] == "0" or muj_board[int(move_row)][int(move_column)] == "X":
+        if muj_board[int(move_translated[0])][int(move_translated[1])] == "0" or muj_board[int(move_translated[0])][int(move_translated[1])] == "X":
             continue
         else:
             break
-    return move_row, move_column, muj_board
+    return move_translated, muj_board
 
 # def Players_move_column(muj_board, size_of_board, player):
 #     while True:
@@ -108,37 +104,37 @@ def Players_move_row(muj_board, size_of_board, player):
 #             break
 #     return move_column, muj_board
 
-def Control_of_user_input(User_move, size_of_board) ->bool:
+def Control_of_user_input(User_move) ->bool:
     if User_move.isdigit():
-        if int(User_move) < 0 or int(User_move) > (size_of_board-1):
-            print(f"Your input {User_move} needs to be the digit from the list: {list(range(size_of_board))}")
+        if int(User_move) < 0 or int(User_move) > 9:
+            print(f"Your input {User_move} needs to be the digit from the list: {list(range(1,10))}")
             return True
         else:
             return False
     else:
-        print(f"Your input {User_move} needs to be the digit {list(range(size_of_board))}")
+        print(f"Your input {User_move} needs to be the digit {list(range(1,10))}")
         return True
 
-def Print_move(muj_board, move_row, move_column, symbol, player):
+def Print_move(muj_board, move_translated, symbol, player):
     """ """
     print(MY_SEPARATOR)
     if player == 1:
-        muj_board[int(move_row)][int(move_column)] = symbol
+        muj_board[int(move_translated[0])][int(move_translated[1])] = symbol
         player = 2
 
     else:
         if symbol == "X":
-            muj_board[int(move_row)][int(move_column)] = "0"
+            muj_board[int(move_translated[0])][int(move_translated[1])] = "0"
             player = 1
 
         elif symbol == "0":
-            muj_board[int(move_row)][int(move_column)] = "X"
+            muj_board[int(move_translated[0])][int(move_translated[1])] = "X"
             player = 1
 
     return player, muj_board
 
 def Print_Board(muj_board, size_of_board):
-
+    pass
 
 def Check_who_win(muj_board):
     pass
